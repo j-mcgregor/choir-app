@@ -27,13 +27,36 @@
 .post-collection {
   max-height: 400px;
   overflow: scroll;
+
+  .collection-item {
+    a {
+      color: #222;
+    }
+    &:hover {
+      background: #e8e8e8;
+    }
+  }
+
+  .icon {
+    height: 20px;
+    width: 20px;
+    padding: 5px;
+    border: 0.5px solid #df4c4c;
+    color: #df4c4c;
+    border-radius: 50%;
+
+    &:hover {
+      cursor: pointer;
+      background: #b43b3b;
+      color: #fff;
+    }
+  }
 }
 
 .player-container {
   display: flex;
   flex-direction: column;
   text-align: left;
-  // margin-bottom: 20px;
 
   label {
     font-size: 15px;

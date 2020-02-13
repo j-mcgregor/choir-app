@@ -21,7 +21,7 @@ class Navbar extends Component {
 
     return (
       <div className="navbar-fixed">
-        <nav className="cyan lighten-3">
+        <nav className="blue-grey">
           <div className="nav-wrapper container">
             <Link to="/" className="brand-logo left">
               <FontAwesomeIcon icon={faHome} />
