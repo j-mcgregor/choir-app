@@ -12,9 +12,11 @@ import Landing from './components/layout/Landing';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import PrivateRoute from './components/private-route/PrivateRoute';
+// PRIVATE ROUTES
 import Dashboard from './components/dashboard/Dashboard';
+import Upload from './components/upload/Upload';
 
-import './App.css';
+import './App.scss';
 
 // Check for token to keep user logged in
 if (localStorage.jwtToken) {
@@ -47,6 +49,7 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              <PrivateRoute exact path="/upload" component={Upload} />
             </Switch>
           </div>
         </Router>

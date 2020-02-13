@@ -1,0 +1,17 @@
+.file-box {
+  display: inline-block;
+  overflow: hidden;
+  border-radius: 3px;
+  width: 100px;
+  height: 100px;
+  margin-right: 1rem;
+  text-align: center;
+  font-family: 'Gill Sans', inherit;
+  border-radius: 0.5rem;
+  box-shadow: 0 1.5px 4px -1px black;
+
+  p {
+    word-wrap: break-word;
+    font-size: 12px;
+  }
+}
