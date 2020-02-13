@@ -1,3 +1,7 @@
+.mr-sm {
+  margin-right: 10px;
+}
+
 .mr-1 {
   margin-right: 1rem;
 }
@@ -10,4 +14,55 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.post-collection {
+  max-height: 400px;
+  overflow: scroll;
+}
+
+.player-container {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  // margin-bottom: 20px;
+
+  label {
+    font-size: 15px;
+    margin-bottom: 8px;
+    color: rgb(36, 141, 92);
+    text-transform: capitalize;
+  }
+}
+
+.spinner-container {
+  width: 100%;
+  margin: auto;
+  padding-top: 10px;
+}
+
+.spinner {
+  height: 60px;
+  width: 60px;
+  border-top: 1px solid #000;
+  bottom: 1px solid #000;
+  border-radius: 50%;
+  animation: spin 1s infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
