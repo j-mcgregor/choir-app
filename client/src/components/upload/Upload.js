@@ -1,18 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { uploadFiles } from '../../actions/fileActions';
 import Dropzone from 'react-dropzone';
 import FileBox from './fileBox/FileBox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import './Upload.scss';
 
-const Upload = props => {
+const Upload = () => {
   const [files, setFiles] = useState([]);
   const [description, setDescription] = useState('');
 
-  useEffect(() => {
-    console.log(files);
-  }, [files]);
+  const { filesLoading } = useSelector(state => ({
+    filesLoading: state.files.loading
+  }));
+
+  const dispatch = useDispatch();
 
   const handleChangeDescription = e => {
     setDescription(e.target.value);
@@ -24,7 +27,7 @@ const Upload = props => {
 
     const headers = {
       Type: 'formData',
-      Authorization: props.tokenProp,
+      Authorization: localStorage.getItem('token') || '',
       UploadDescription: description
     };
 
@@ -34,13 +37,7 @@ const Upload = props => {
       formData.append('files', file);
     });
 
-    try {
-      const response = await axios.post('/files/upload', formData, { headers });
-      console.log(response);
-      window.location.href = window.location.href + 'allfiles';
-    } catch (error) {
-      props.logout();
-    }
+    dispatch(uploadFiles(formData, headers));
   };
 
   const handleOnDrop = files => {
@@ -95,9 +92,10 @@ const Upload = props => {
             <button
               type="submit"
               className="btn waves-effect waves-light hoverable"
+              disabled={filesLoading}
             >
               <FontAwesomeIcon icon={faUpload} className="mr-1" />
-              Upload
+              {filesLoading ? 'Uploading' : 'Upload'}
             </button>
           </div>
         </div>

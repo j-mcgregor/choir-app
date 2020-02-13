@@ -1,8 +1,38 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
+const multer = require('multer');
+const multerGridFS = require('multer-gridfs-storage');
 const gridFsStream = require('gridfs-stream');
+const crypto = require('crypto');
 const ObjectId = require('mongodb').ObjectID;
+const jwt = require('jsonwebtoken');
+const path = require('path');
+const keys = require('../../config/keys');
+
+const parseToken = token =>
+  jwt.verify(token.replace(/^JWT\s/, ''), keys.secretOrKey);
+
+const handleExpire = (request, response) => {
+  try {
+    const realToken = parseToken(request.headers.authorization);
+    return realToken;
+  } catch (err) {
+    if (err.name === 'TokenExpiredError') {
+      //handle expire
+
+      response.status(401).json({ errors: 'Token expired' });
+    } else if (err.name === 'TypeError') {
+      //handle no-token
+
+      response.status(401).json({ errors: 'No token' });
+    } else {
+      response.status(401).json({ errors: 'Something went wrong..' });
+    }
+    console.log(err);
+    return '';
+  }
+};
 
 let gfs;
 const mongoURI = require('../../config/keys').mongoURI;
@@ -16,6 +46,49 @@ mongoose
     gfs.collection('uploads');
     console.log('Made connection to mongo!');
   });
+
+//define storage
+const storage = new multerGridFS({
+  url: mongoURI,
+  file: (req, file) => {
+    console.log('[File]', file);
+    return new Promise((resolve, reject) => {
+      if (!parseToken(req.headers.authorization)) reject('Couldnt parse token'); //authorization
+      crypto.randomBytes(16, (err, buf) => {
+        if (err) {
+          return reject(err);
+        }
+        const filename = buf.toString('hex') + path.extname(file.originalname); //given up on that one...
+        console.log('[Filename]:', filename);
+        const fileInfo = {
+          filename: file.originalname,
+          bucketName: 'uploads',
+          metadata: {
+            uploaderId: parseToken(req.headers.authorization)._id,
+            uploadDescription: req.headers.uploaddescription
+          }
+        };
+        resolve(fileInfo);
+      });
+    });
+  }
+});
+
+const upload = multer({ storage });
+
+/**
+ @route POST /files/upload
+ @desc UPLOAD FILE
+ @access Private
+ */
+
+router.post('/upload', upload.any(), (request, response) => {
+  console.log('[Upload post request body]', request.headers, request.body);
+
+  if (handleExpire(request, response)) {
+    response.json({ msg: 'success' });
+  }
+});
 
 /**
  @route GET /files/all

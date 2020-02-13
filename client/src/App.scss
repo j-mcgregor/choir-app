@@ -16,12 +16,8 @@
   justify-content: space-between;
 }
 
-.text-left {
-  text-align: left;
-}
-
-.text-right {
-  text-align: right;
+.subtitle {
+  text-transform: capitalize;
 }
 
 .post-collection {
@@ -87,5 +83,11 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+video {
+  &:focus {
+    outline: none;
   }
 }

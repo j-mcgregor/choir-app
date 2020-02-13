@@ -26,7 +26,7 @@ const Dashboard = () => {
     <div className="container">
       <div className="row">
         <h3 className="">Dashboard</h3>
-        <h6 className="">Welcome, {user.name}</h6>
+        <h6 className="subtitle">Welcome, {user.name}</h6>
       </div>
       <div className="row">
         <div className="col s10">

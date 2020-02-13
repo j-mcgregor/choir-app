@@ -2,14 +2,17 @@ import axios from 'axios';
 import {
   GET_FILES_STARTED,
   GET_FILES_SUCCESS,
-  GET_FILES_FAILURE
+  GET_FILES_FAILURE,
+  UPLOAD_FILES_STARTED,
+  UPLOAD_FILES_SUCCESS,
+  UPLOAD_FILES_FAILURE
 } from '../actions/types';
 
 export const getFiles = () => async dispatch => {
   try {
     dispatch({ type: GET_FILES_STARTED });
     const response = await axios.get('/api/files/all');
-    console.log(response);
+
     if (response.status >= 200 || response.status < 300) {
       dispatch({ type: GET_FILES_SUCCESS, payload: response.data });
     } else {
@@ -19,6 +22,25 @@ export const getFiles = () => async dispatch => {
     dispatch({
       type: GET_FILES_FAILURE,
       errors: err
+    });
+  }
+};
+
+export const uploadFiles = (formData, headers) => async dispatch => {
+  try {
+    dispatch({ type: UPLOAD_FILES_STARTED });
+    const response = await axios.post('/api/files/upload', formData, {
+      headers
+    });
+    if (response.status >= 200 || response.status < 300) {
+      dispatch({ type: UPLOAD_FILES_SUCCESS, payload: response.data });
+    } else {
+      throw Error();
+    }
+  } catch (error) {
+    dispatch({
+      type: UPLOAD_FILES_FAILURE,
+      errors: error
     });
   }
 };
