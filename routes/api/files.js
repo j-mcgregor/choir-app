@@ -109,35 +109,26 @@ router.get('/all', (req, res) => {
 router.get('/download/:id', (req, res) => {
   gfs.collection('uploads');
 
-  gfs.files.findOne(
-    {
-      _id: new ObjectId(req.params.id)
-    },
-    (err, file) => {
-      if (err) {
-        return res.status(400).send(err);
-      } else if (!file) {
-        return res.status(404).send(err);
-      }
-      var readstream = gfs.createReadStream({
-        _id: file._id,
-        root: 'uploads'
-      });
+  gfs.files.findOne({ _id: new ObjectId(req.params.id) }, (err, file) => {
+    if (err) res.status(400).send(err);
+    if (!file) res.status(404).send(err);
 
-      res.set('Content-Type', file.contentType);
-      res.set(
-        'Content-Disposition',
-        `attachment; filename="${encodeURIComponent(file.filename)}"`
-      );
-      readstream.on('error', err => {
-        console.log(err);
-        res.end();
-      });
-      return readstream.pipe(res);
-      // console.log(readstream);
-      // return res.status(204).send();
-    }
-  );
+    const readstream = gfs.createReadStream({
+      _id: file._id,
+      root: 'uploads'
+    });
+
+    res.set('Content-Type', file.contentType);
+    res.set(
+      'Content-Disposition',
+      `attachment; filename="${encodeURIComponent(file.filename)}"`
+    );
+    readstream.on('error', err => {
+      console.log(err);
+      res.end();
+    });
+    return readstream.pipe(res);
+  });
 });
 
 /**

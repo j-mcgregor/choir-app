@@ -9,6 +9,7 @@ import {
   faSignOutAlt
 } from '@fortawesome/free-solid-svg-icons';
 import { logoutUser } from '../../actions/authActions';
+import './Navbar.scss';
 
 class Navbar extends Component {
   logoutHandler = e => {
@@ -21,7 +22,7 @@ class Navbar extends Component {
 
     return (
       <div className="navbar-fixed">
-        <nav className="blue-grey">
+        <nav className="">
           <div className="nav-wrapper container">
             <Link to="/" className="brand-logo left">
               <FontAwesomeIcon icon={faHome} />

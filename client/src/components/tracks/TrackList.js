@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import FileSaver from 'file-saver';
 import ReactPlayer from 'react-player';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCopy, faTrash, faDownload } from '@fortawesome/free-solid-svg-icons';
@@ -28,10 +29,12 @@ const TrackList = ({ files, isAuthenticated }) => {
     document.body.removeChild(tempEle);
   };
 
-  const handleDownload = async id => {
+  const handleDownload = async (id, filename) => {
     try {
-      const response = await axios.get(`/api/files/download/${id}`);
-      console.log(response);
+      const response = await axios.get(`/api/files/download/${id}`, {
+        responseType: 'blob'
+      });
+      FileSaver.saveAs(response.data, `${filename}.mp3`);
     } catch (error) {
       console.log(error);
     }
@@ -63,7 +66,10 @@ const TrackList = ({ files, isAuthenticated }) => {
                       style={{ marginBottom: '10px' }}
                       config={{
                         file: {
-                          forceAudio: true
+                          forceAudio: true,
+                          attributes: {
+                            nodownload: 'true'
+                          }
                         }
                       }}
                     />
@@ -76,8 +82,8 @@ const TrackList = ({ files, isAuthenticated }) => {
                       <FontAwesomeIcon icon={faCopy} />
                     </button>
                     <button
-                      className="btn-floating mr-sm"
-                      onClick={() => handleDownload(f._id)}
+                      className="btn-floating mr-sm lime accent-2"
+                      onClick={() => handleDownload(f._id, f.filename)}
                     >
                       <FontAwesomeIcon icon={faDownload} />
                     </button>

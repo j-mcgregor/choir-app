@@ -5,6 +5,7 @@ import { getPosts } from '../../actions/postActions';
 
 import TrackList from '../tracks/TrackList';
 import PostList from '../posts/PostList';
+import './Landing.scss';
 
 const Landing = () => {
   const { files, posts } = useSelector(state => ({
@@ -20,16 +21,30 @@ const Landing = () => {
   }, [dispatch]);
 
   return (
-    <div className="container">
-      <div className="row">
-        <h3 className="">Welcome to the All Saints Choir noticeboard!</h3>
-      </div>
-      <div className="row">
-        <div className="col s10">
-          <TrackList files={files} isAuthenticated={false} />
+    <div>
+      <div className="container-fluid">
+        <div className="container">
+          <div className="row">
+            <h4 className="col m8">
+              Welcome to <br /> All Saints Community Choir!
+            </h4>
+            <p className="col m8">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum
+              fugit quis nostrum nemo deserunt velit delectus asperiores laborum
+              dolores iure quae eligendi voluptatibus, odio unde est id nisi
+              consectetur tenetur.
+            </p>
+          </div>
         </div>
-        <div className="col s10">
-          <PostList posts={posts} isAuthenticated={false} />
+      </div>
+      <div className="container">
+        <div className="row">
+          <div className="col s10">
+            <TrackList files={files} isAuthenticated={false} />
+          </div>
+          <div className="col s10">
+            <PostList posts={posts} isAuthenticated={false} />
+          </div>
         </div>
       </div>
     </div>
