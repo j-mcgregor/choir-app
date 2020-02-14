@@ -18,8 +18,7 @@ const fileBox = props => {
 
   return (
     <div className="file-box">
-      <a
-        href="#"
+      <span
         className="remove-file-box"
         onClick={e => {
           props.onRemove.call(this, e, props.index);
@@ -27,7 +26,7 @@ const fileBox = props => {
         style={xStyle}
       >
         X
-      </a>
+      </span>
       <p>{props.fileName.slice(0, 20) + '...'}</p>
       <p>{size}</p>
     </div>

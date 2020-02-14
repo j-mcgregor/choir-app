@@ -105,25 +105,3 @@ const Upload = () => {
 };
 
 export default Upload;
-
-{
-  /* <Dropzone handleOnDrop={handleOnDrop.bind(this)} className="dropzone">
-  {files && files.length === 0 ? (
-    <p>
-      Try dropping some files here, or click to select files to upload.
-    </p>
-  ) : (
-    <div>
-      {files.map((f, index) => (
-        <FileBox
-          key={f.name}
-          fileName={f.name}
-          size={f.size}
-          handleOnRemove={handleOnRemove}
-          index={index}
-        />
-      ))}
-    </div>
-  )}
-</Dropzone> */
-}

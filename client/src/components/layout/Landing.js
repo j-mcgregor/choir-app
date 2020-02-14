@@ -17,7 +17,7 @@ const Landing = () => {
   useEffect(() => {
     dispatch(getFiles());
     dispatch(getPosts());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="container">

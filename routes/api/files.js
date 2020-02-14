@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const multer = require('multer');
-const multerGridFS = require('multer-gridfs-storage');
-const gridFsStream = require('gridfs-stream');
+const GridFsStorage = require('multer-gridfs-storage');
+const Grid = require('gridfs-stream');
 const crypto = require('crypto');
 const ObjectId = require('mongodb').ObjectID;
 const jwt = require('jsonwebtoken');
@@ -13,60 +13,54 @@ const keys = require('../../config/keys');
 const parseToken = token =>
   jwt.verify(token.replace(/^JWT\s/, ''), keys.secretOrKey);
 
-const handleExpire = (request, response) => {
+const handleExpire = (req, res) => {
   try {
-    const realToken = parseToken(request.headers.authorization);
+    const realToken = parseToken(req.headers.authorization);
     return realToken;
   } catch (err) {
     if (err.name === 'TokenExpiredError') {
       //handle expire
 
-      response.status(401).json({ errors: 'Token expired' });
+      res.status(401).json({ errors: 'Token expired' });
     } else if (err.name === 'TypeError') {
       //handle no-token
 
-      response.status(401).json({ errors: 'No token' });
+      res.status(401).json({ errors: 'No token' });
     } else {
-      response.status(401).json({ errors: 'Something went wrong..' });
+      res.status(401).json({ errors: 'Something went wrong..' });
     }
     console.log(err);
     return '';
   }
 };
 
-let gfs;
 const mongoURI = require('../../config/keys').mongoURI;
-mongoose
-  .createConnection(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
-  .then(conn => {
-    gfs = gridFsStream(conn.db, mongoose.mongo);
-    gfs.collection('uploads');
-    console.log('Made connection to mongo!');
-  });
+
+// Create mongo connection
+const conn = mongoose.createConnection(mongoURI);
+
+// Init gfs
+let gfs;
+
+conn.once('open', () => {
+  // Init stream
+  gfs = Grid(conn.db, mongoose.mongo);
+  gfs.collection('uploads');
+});
 
 //define storage
-const storage = new multerGridFS({
+const storage = new GridFsStorage({
   url: mongoURI,
   file: (req, file) => {
-    console.log('[File]', file);
     return new Promise((resolve, reject) => {
-      if (!parseToken(req.headers.authorization)) reject('Couldnt parse token'); //authorization
       crypto.randomBytes(16, (err, buf) => {
         if (err) {
           return reject(err);
         }
-        const filename = buf.toString('hex') + path.extname(file.originalname); //given up on that one...
-        console.log('[Filename]:', filename);
+        const filename = buf.toString('hex') + path.extname(file.originalname);
         const fileInfo = {
-          filename: file.originalname,
-          bucketName: 'uploads',
-          metadata: {
-            uploaderId: parseToken(req.headers.authorization)._id,
-            uploadDescription: req.headers.uploaddescription
-          }
+          filename: filename,
+          bucketName: 'uploads'
         };
         resolve(fileInfo);
       });
@@ -82,11 +76,9 @@ const upload = multer({ storage });
  @access Private
  */
 
-router.post('/upload', upload.any(), (request, response) => {
-  console.log('[Upload post request body]', request.headers, request.body);
-
-  if (handleExpire(request, response)) {
-    response.json({ msg: 'success' });
+router.post('/upload', upload.any(), (req, res) => {
+  if (handleExpire(req, res)) {
+    res.json({ msg: 'success' });
   }
 });
 
@@ -110,18 +102,56 @@ router.get('/all', (req, res) => {
 
 /**
  @route GET /download/:id
- @desc DOWNLOAD / STREAM
+ @desc DOWNLOAD
  @access Public
  */
 
 router.get('/download/:id', (req, res) => {
+  gfs.collection('uploads');
+
+  gfs.files.findOne(
+    {
+      _id: new ObjectId(req.params.id)
+    },
+    (err, file) => {
+      if (err) {
+        return res.status(400).send(err);
+      } else if (!file) {
+        return res.status(404).send(err);
+      }
+      var readstream = gfs.createReadStream({
+        _id: file._id,
+        root: 'uploads'
+      });
+
+      res.set('Content-Type', file.contentType);
+      res.set(
+        'Content-Disposition',
+        `attachment; filename="${encodeURIComponent(file.filename)}"`
+      );
+      readstream.on('error', err => {
+        console.log(err);
+        res.end();
+      });
+      return readstream.pipe(res);
+      // console.log(readstream);
+      // return res.status(204).send();
+    }
+  );
+});
+
+/**
+ @route GET /stream/:id
+ @desc DOWNLOAD / STREAM
+ @access Public
+ */
+
+router.get('/stream/:id', (req, res) => {
   gfs.collection('uploads'); //set collection name to lookup into
 
   const fileId = req.params.id;
 
   gfs.files.find({ _id: new ObjectId(fileId) }).toArray((err, files) => {
-    console.log(files.length);
-
     /** First check if file exists */
     if (!files || files.length === 0) {
       return res.status(404).json({
@@ -136,16 +166,29 @@ router.get('/download/:id', (req, res) => {
       root: 'uploads'
     });
 
-    // set the proper content type
     res.set('Content-Type', files[0].contentType);
     res.set(
       'Content-Disposition',
-      'attachment; filename="' + encodeURIComponent(files[0].filename) + '"'
+      `attachment; filename="${encodeURIComponent(files[0].filename)}"`
     );
 
-    // return response
+    // return res
     return readstream.pipe(res);
   });
+});
+
+router.delete('/:id', (req, res) => {
+  if (handleExpire(req, res)) {
+    gfs.remove({ _id: req.params.id, root: 'uploads' }, err => {
+      if (err) {
+        return res.status(404).json({ err });
+      }
+
+      res.status(204).json({ message: 'Track deleted successfully' });
+    });
+  } else {
+    res.status(204).json({ message: 'Track deleted successfully' });
+  }
 });
 
 module.exports = router;

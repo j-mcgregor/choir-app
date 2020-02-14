@@ -18,9 +18,13 @@ const Dashboard = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log(files);
+  }, [files]);
+
+  useEffect(() => {
     dispatch(getFiles());
     dispatch(getPosts());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="container">
@@ -29,7 +33,7 @@ const Dashboard = () => {
         <h6 className="subtitle">Welcome, {user.name}</h6>
       </div>
       <div className="row">
-        <div className="col s10">
+        <div className="col s12">
           <TrackList files={files} isAuthenticated={isAuthenticated} />
         </div>
         <div className="col s10">

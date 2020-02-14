@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
+import Spinner from '../shared/Spinner';
 import genKey from '../../utils/genKey';
 
 const PostList = ({ posts, isAuthenticated }) => {
@@ -32,9 +33,7 @@ const PostList = ({ posts, isAuthenticated }) => {
             </div>
           ))
         ) : (
-          <div className="spinner-container">
-            <div className="spinner" />
-          </div>
+          <Spinner />
         )}
       </div>
     </div>
