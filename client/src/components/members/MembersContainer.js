@@ -21,8 +21,8 @@ const MembersContainer = () => {
 
   const { members, member, errors } = membersList;
 
-  const [name, setName] = useState('test');
-  const [email, setEmail] = useState('test@test.com');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [selected, setSelected] = useState([]);
 
   useEffect(() => {
@@ -161,7 +161,9 @@ const MembersContainer = () => {
                 <input
                   type="checkbox"
                   onChange={handleSelectAll}
-                  checked={selected.length === members.length}
+                  checked={
+                    selected.length > 1 && selected.length === members.length
+                  }
                 />
                 <span>Select</span>
               </label>
