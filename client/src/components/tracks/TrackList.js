@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux';
 
 import { deleteFile, getFiles } from '../../actions/fileActions';
 import genKey from '../../utils/genKey';
+import Spinner from '../shared/Spinner';
 
 const TrackList = ({ files, isAuthenticated }) => {
   const dispatch = useDispatch();
@@ -45,25 +46,26 @@ const TrackList = ({ files, isAuthenticated }) => {
       <h4 className="left-align">
         Tracks {files && files.length ? `: ${files.length}` : ''}
       </h4>
-
-      {files && files.length
-        ? files.map((f, i) => {
-            return (
-              <div className="player-container" key={genKey(f.filename, i)}>
-                <div className="row">
-                  <div className="col s9">
-                    <label>{f.filename}</label>
-                  </div>
-                  <div className="col s3"></div>
-                </div>
-                <div className="row">
-                  <div className="col s8 player">
+      <table>
+        <thead>
+          <tr>
+            <th>Track</th>
+            <th>Player</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {files && files.length ? (
+            files.map((f, i) => {
+              return (
+                <tr key={genKey(f.filename, i)}>
+                  <td>{f.filename}</td>
+                  <td style={{ minWidth: '200px' }}>
                     <ReactPlayer
                       url={`/api/files/stream/${f._id}`}
                       controls
                       height="30px"
                       width="100%"
-                      style={{ marginBottom: '10px' }}
                       config={{
                         file: {
                           forceAudio: true,
@@ -73,8 +75,8 @@ const TrackList = ({ files, isAuthenticated }) => {
                         }
                       }}
                     />
-                  </div>
-                  <div className="col s3">
+                  </td>
+                  <td>
                     <button
                       className="btn-floating mr-sm"
                       onClick={() => handleCopy(f._id)}
@@ -97,12 +99,19 @@ const TrackList = ({ files, isAuthenticated }) => {
                     ) : (
                       ''
                     )}
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        : ''}
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan="2">
+                <Spinner />
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };

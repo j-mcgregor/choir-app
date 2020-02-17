@@ -17,7 +17,6 @@ import PrivateRoute from './components/private-route/PrivateRoute';
 import Dashboard from './components/dashboard/Dashboard';
 import Upload from './components/upload/Upload';
 import PostsContainer from './components/posts/PostsContainer';
-import PostForm from './components/posts/PostForm';
 
 import './App.scss';
 

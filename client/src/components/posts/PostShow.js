@@ -7,7 +7,6 @@ import './Post.scss';
 
 const PostShow = () => {
   const { id } = useParams();
-  console.log(id);
   const dispatch = useDispatch();
   const { posts } = useSelector(state => ({
     posts: state.posts
@@ -15,7 +14,7 @@ const PostShow = () => {
 
   useEffect(() => {
     dispatch(getPost(id));
-  }, [dispatch]);
+  }, [dispatch, id]);
 
   const { post, loading } = posts;
 
@@ -27,7 +26,7 @@ const PostShow = () => {
             <h3 className="title">{post.title ? post.title : ''}</h3>
           </div>
           <div className="col s8">
-            <h4 className="subtitle">{post.body ? post.body : ''}</h4>
+            <p>{post.body ? post.body : ''}</p>
           </div>
         </div>
       )}

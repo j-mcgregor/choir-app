@@ -2,9 +2,10 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { getFiles } from '../../actions/fileActions';
-import { getPosts } from '../../actions/postActions';
+import { getPosts, deletePost } from '../../actions/postActions';
 import TrackList from '../tracks/TrackList';
 import PostList from '../posts/PostList';
+import './Dashboard.scss';
 
 const Dashboard = () => {
   const { auth, files, posts } = useSelector(state => ({
@@ -18,16 +19,17 @@ const Dashboard = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(files);
-  }, [files]);
-
-  useEffect(() => {
     dispatch(getFiles());
     dispatch(getPosts());
   }, [dispatch]);
 
+  const handleDelete = id => {
+    dispatch(deletePost(id));
+    window.location.reload();
+  };
+
   return (
-    <div>
+    <div className="dashboard">
       <div className="container-fluid">
         <div className="container">
           <div className="row">
@@ -36,14 +38,17 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <div className="container">
-        <div className="row">
-          <div className="col s12">
-            <TrackList files={files} isAuthenticated={isAuthenticated} />
-          </div>
-          <div className="col s10">
-            <PostList posts={posts} isAuthenticated={isAuthenticated} />
-          </div>
+
+      <div className="row dashboard-container">
+        <div className="col s8">
+          <TrackList files={files} isAuthenticated={isAuthenticated} />
+        </div>
+        <div className="col s4">
+          <PostList
+            posts={posts}
+            isAuthenticated={isAuthenticated}
+            handleDelete={handleDelete}
+          />
         </div>
       </div>
     </div>

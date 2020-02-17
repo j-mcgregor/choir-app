@@ -35,7 +35,7 @@ const PostsIndex = () => {
       <h4 className="left-align">
         Posts {posts && posts.length ? `: ${posts.length}` : ''}
       </h4>
-      <table className="striped highlight">
+      <table className="">
         <thead>
           <tr>
             <th>Title</th>

@@ -38,14 +38,12 @@ const Landing = () => {
         </div>
       </div>
       <div className="container-fluid">
-        <div className="container">
-          <div className="row">
-            <div className="col s10">
-              <TrackList files={files} isAuthenticated={false} />
-            </div>
-            <div className="col s10">
-              <PostList posts={posts} isAuthenticated={false} />
-            </div>
+        <div className="row">
+          <div className="col s8">
+            <TrackList files={files} isAuthenticated={false} />
+          </div>
+          <div className="col s4">
+            <PostList posts={posts} isAuthenticated={false} />
           </div>
         </div>
       </div>
