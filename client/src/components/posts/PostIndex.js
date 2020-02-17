@@ -47,7 +47,7 @@ const PostsIndex = () => {
             posts.map((p, i) => (
               <tr key={genKey(p.title, i)}>
                 <td>
-                  <Link to={`/posts/${p._id}`} className="card-title truncate">
+                  <Link to={`/posts/${p._id}`} className="truncate">
                     {p.title}
                   </Link>
                 </td>

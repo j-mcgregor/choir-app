@@ -9,7 +9,8 @@ import {
   faSignOutAlt,
   faPlus,
   faCaretDown,
-  faCommentAlt
+  faCommentAlt,
+  faUsers
 } from '@fortawesome/free-solid-svg-icons';
 import { logoutUser } from '../../actions/authActions';
 import './Navbar.scss';
@@ -52,6 +53,12 @@ class Navbar extends Component {
             </ul>
             {isAuthenticated ? (
               <ul id="nav-mobile" className="right">
+                <li>
+                  <Link to="/members">
+                    <FontAwesomeIcon icon={faUsers} className="mr-1" />
+                    Members
+                  </Link>
+                </li>
                 <li>
                   <a
                     className="dropdown-trigger"

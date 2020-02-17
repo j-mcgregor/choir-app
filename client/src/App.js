@@ -17,6 +17,7 @@ import PrivateRoute from './components/private-route/PrivateRoute';
 import Dashboard from './components/dashboard/Dashboard';
 import Upload from './components/upload/Upload';
 import PostsContainer from './components/posts/PostsContainer';
+import MembersContainer from './components/members/MembersContainer';
 
 import './App.scss';
 
@@ -53,6 +54,7 @@ class App extends Component {
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/upload" component={Upload} />
               <PrivateRoute path="/posts" component={PostsContainer} />
+              <PrivateRoute path="/members" component={MembersContainer} />
             </Switch>
             <Footer />
           </div>
