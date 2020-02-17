@@ -43,9 +43,9 @@ const TrackList = ({ files, isAuthenticated }) => {
 
   return (
     <div>
-      <h4 className="left-align">
+      <h5 className="left-align">
         Tracks {files && files.length ? `: ${files.length}` : ''}
-      </h4>
+      </h5>
       <table>
         <thead>
           <tr>

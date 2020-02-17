@@ -9,15 +9,15 @@ import genKey from '../../utils/genKey';
 const PostList = ({ posts, isAuthenticated, handleDelete }) => {
   return (
     <div>
-      <h4 className="left-align">
+      <h5 className="left-align">
         Posts {posts && posts.posts.length ? `: ${posts.posts.length}` : ''}
-      </h4>
+      </h5>
       <div>
         <table className="striped">
           <thead>
             <tr>
               <th>Title</th>
-              <th>Action</th>
+              {isAuthenticated && <th>Action</th>}
             </tr>
           </thead>
           <tbody>
@@ -35,8 +35,8 @@ const PostList = ({ posts, isAuthenticated, handleDelete }) => {
                       {p.title}
                     </Link>
                   </td>
-                  <td>
-                    {isAuthenticated && (
+                  {isAuthenticated && (
+                    <td>
                       <Fragment>
                         <FontAwesomeIcon
                           icon={faTrash}
@@ -47,8 +47,8 @@ const PostList = ({ posts, isAuthenticated, handleDelete }) => {
                           <FontAwesomeIcon icon={faEdit} />
                         </Link>
                       </Fragment>
-                    )}
-                  </td>
+                    </td>
+                  )}
                 </tr>
               ))
             ) : (
