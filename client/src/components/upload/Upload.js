@@ -54,7 +54,7 @@ const Upload = () => {
 
   return (
     <div className="container upload-container">
-      <h2>Upload your files</h2>
+      <h4>Upload your files</h4>
       <form onSubmit={handleSubmitFiles} encType="multipart/form-data">
         <Dropzone onDrop={handleOnDrop}>
           {({ getRootProps, getInputProps }) => {

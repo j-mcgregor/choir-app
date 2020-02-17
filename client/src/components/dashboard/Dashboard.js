@@ -27,17 +27,23 @@ const Dashboard = () => {
   }, [dispatch]);
 
   return (
-    <div className="container">
-      <div className="row">
-        <h3 className="">Dashboard</h3>
-        <h6 className="subtitle">Welcome, {user.name}</h6>
-      </div>
-      <div className="row">
-        <div className="col s12">
-          <TrackList files={files} isAuthenticated={isAuthenticated} />
+    <div>
+      <div className="container-fluid">
+        <div className="container">
+          <div className="row">
+            <h3 className="">Dashboard</h3>
+            <h6 className="subtitle">Welcome, {user.name}</h6>
+          </div>
         </div>
-        <div className="col s10">
-          <PostList posts={posts} isAuthenticated={isAuthenticated} />
+      </div>
+      <div className="container">
+        <div className="row">
+          <div className="col s12">
+            <TrackList files={files} isAuthenticated={isAuthenticated} />
+          </div>
+          <div className="col s10">
+            <PostList posts={posts} isAuthenticated={isAuthenticated} />
+          </div>
         </div>
       </div>
     </div>

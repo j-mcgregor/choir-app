@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 
 import Navbar from './components/layout/Navbar';
+import Footer from './components/layout/Footer';
 import Landing from './components/layout/Landing';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
@@ -15,6 +16,8 @@ import PrivateRoute from './components/private-route/PrivateRoute';
 // PRIVATE ROUTES
 import Dashboard from './components/dashboard/Dashboard';
 import Upload from './components/upload/Upload';
+import PostsContainer from './components/posts/PostsContainer';
+import PostForm from './components/posts/PostForm';
 
 import './App.scss';
 
@@ -50,7 +53,9 @@ class App extends Component {
             <Switch>
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/upload" component={Upload} />
+              <PrivateRoute path="/posts" component={PostsContainer} />
             </Switch>
+            <Footer />
           </div>
         </Router>
       </Provider>

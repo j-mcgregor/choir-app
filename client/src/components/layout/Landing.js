@@ -22,7 +22,7 @@ const Landing = () => {
 
   return (
     <div>
-      <div className="container-fluid">
+      <div className="container-fluid banner">
         <div className="container">
           <div className="row">
             <h4 className="col m8">
@@ -37,13 +37,15 @@ const Landing = () => {
           </div>
         </div>
       </div>
-      <div className="container">
-        <div className="row">
-          <div className="col s10">
-            <TrackList files={files} isAuthenticated={false} />
-          </div>
-          <div className="col s10">
-            <PostList posts={posts} isAuthenticated={false} />
+      <div className="container-fluid">
+        <div className="container">
+          <div className="row">
+            <div className="col s10">
+              <TrackList files={files} isAuthenticated={false} />
+            </div>
+            <div className="col s10">
+              <PostList posts={posts} isAuthenticated={false} />
+            </div>
           </div>
         </div>
       </div>

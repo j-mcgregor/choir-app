@@ -1,9 +1,5 @@
 @import '../../palette.scss';
 
-nav {
+footer {
   background: linear-gradient(210deg, $color2, $color3);
-
-  .dropdown-content {
-    top: 64px !important;
-  }
 }

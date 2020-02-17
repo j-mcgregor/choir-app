@@ -1,0 +1,18 @@
+@import '../../palette.scss';
+
+.form-container {
+  min-height: 50vh;
+
+  button {
+    background: linear-gradient(210deg, $color2, $color3) !important;
+    transition: 0.1s;
+
+    &:hover {
+      background: linear-gradient(
+        210deg,
+        darken($color2, 10%),
+        darken($color3, 10%)
+      ) !important;
+    }
+  }
+}

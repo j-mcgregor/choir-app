@@ -1,5 +1,12 @@
+@import '../../palette.scss';
+
 .container-fluid {
   box-sizing: border-box;
   padding: 4rem 0;
-  background: linear-gradient(210deg, #9e95d8, #dfffb5);
+  background: $color6;
+  color: $color5;
+
+  &.banner {
+    background: linear-gradient(210deg, $color1, $color3);
+  }
 }

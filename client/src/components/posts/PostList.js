@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faEdit } from '@fortawesome/free-solid-svg-icons';
 
 import Spinner from '../shared/Spinner';
 import genKey from '../../utils/genKey';
@@ -16,8 +16,8 @@ const PostList = ({ posts, isAuthenticated }) => {
         {posts && posts.posts.length ? (
           posts.posts.map((p, i) => (
             <div key={genKey(p.title, i)} className="collection-item row">
-              <div className="col s11">
-                <Link to={`/posts/${p.id}`} className="truncate">
+              <div className="col s10">
+                <Link to={`/posts/${p._id}`} className="truncate">
                   {p.title}
                 </Link>
               </div>
@@ -28,6 +28,16 @@ const PostList = ({ posts, isAuthenticated }) => {
                     className="icon"
                     onClick={() => console.log('click')}
                   />
+                )}
+              </div>
+              <div className="col s1">
+                {isAuthenticated && (
+                  <Link to={`/posts/${p._id}/edit`}>
+                    <FontAwesomeIcon
+                      icon={faEdit}
+                      onClick={() => console.log('click')}
+                    />
+                  </Link>
                 )}
               </div>
             </div>

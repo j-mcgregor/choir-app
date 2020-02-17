@@ -7,6 +7,7 @@ const cors = require('cors');
 
 const users = require('./routes/api/users');
 const files = require('./routes/api/files');
+const posts = require('./routes/api/posts');
 
 const app = express();
 
@@ -38,6 +39,7 @@ require('./config/passport')(passport);
 // Routes
 app.use('/api/users', users);
 app.use('/api/files', files);
+app.use('/api/posts', posts);
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {

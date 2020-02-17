@@ -1,0 +1,36 @@
+@import '../../palette.scss';
+
+.show {
+  min-height: 50vh;
+  margin: 7rem auto;
+}
+
+.index {
+  min-height: 50vh;
+  margin: 7rem auto;
+}
+
+.title,
+.subtitle {
+  text-transform: capitalize;
+}
+
+.icon {
+  font-size: 1.2rem;
+  margin: auto 15px;
+}
+
+.delete,
+.edit {
+  &:hover {
+    color: $color1;
+    cursor: pointer;
+  }
+}
+.delete {
+  color: $color2;
+}
+
+.edit {
+  color: $color3;
+}
