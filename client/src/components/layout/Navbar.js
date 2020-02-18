@@ -59,7 +59,7 @@ class Navbar extends Component {
                     Members
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <a
                     className="dropdown-trigger"
                     id="dropdown-trigger"
@@ -69,6 +69,12 @@ class Navbar extends Component {
                     <FontAwesomeIcon icon={faCaretDown} className="mr-1" />
                     Posts
                   </a>
+                </li> */}
+                <li>
+                  <Link to="/posts">
+                    <FontAwesomeIcon icon={faCommentAlt} className="mr-1" />
+                    Posts
+                  </Link>
                 </li>
                 <li>
                   <Link to="/upload">

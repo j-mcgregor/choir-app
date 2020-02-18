@@ -9,9 +9,7 @@ import genKey from '../../utils/genKey';
 const PostList = ({ posts, isAuthenticated, handleDelete }) => {
   return (
     <div>
-      <h5 className="left-align">
-        Posts {posts && posts.posts.length ? `: ${posts.posts.length}` : ''}
-      </h5>
+      <h5 className="left-align">New Post</h5>
       <div>
         <table className="striped">
           <thead>
@@ -56,33 +54,6 @@ const PostList = ({ posts, isAuthenticated, handleDelete }) => {
                 <td>No posts</td>
               </tr>
             )}
-            {/* {posts && posts.posts.length ? (
-              posts.posts.map((p, i) => (
-                <tr key={genKey(p.title, i)}>
-                  <td>
-                    <Link to={`/posts/${p._id}`} className="truncate">
-                      {p.title}
-                    </Link>
-                  </td>
-                  <td>
-                    {isAuthenticated && (
-                      <Fragment>
-                        <FontAwesomeIcon
-                          icon={faTrash}
-                          className="icon"
-                          onClick={() => handleDelete(p._id)}
-                        />
-                        <Link to={`/posts/${p._id}/edit`}>
-                          <FontAwesomeIcon icon={faEdit} />
-                        </Link>
-                      </Fragment>
-                    )}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <Spinner />
-            )} */}
           </tbody>
         </table>
       </div>

@@ -1,13 +1,8 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
-
+import PostForm from './PostForm';
 import { getPosts, deletePost } from '../../actions/postActions';
-import Spinner from '../shared/Spinner';
-import genKey from '../../utils/genKey';
-
+import AllPosts from './AllPosts';
 import './Post.scss';
 
 const PostsIndex = () => {
@@ -31,53 +26,28 @@ const PostsIndex = () => {
   const { posts, loading } = postList;
 
   return (
-    <div className="container index">
-      <h4 className="left-align">
-        Posts {posts && posts.length ? `: ${posts.length}` : ''}
-      </h4>
-      <table className="">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {posts && posts.length ? (
-            posts.map((p, i) => (
-              <tr key={genKey(p.title, i)}>
-                <td>
-                  <Link to={`/posts/${p._id}`} className="truncate">
-                    {p.title}
-                  </Link>
-                </td>
-                <td>
-                  {isAuthenticated && (
-                    <Fragment>
-                      <FontAwesomeIcon
-                        icon={faTrash}
-                        className="icon delete"
-                        onClick={() => handleDelete(p._id)}
-                      />
-                      <Link to={`/posts/${p._id}/edit`}>
-                        <FontAwesomeIcon
-                          icon={faEdit}
-                          onClick={() => console.log('click')}
-                          className="icon edit"
-                        />
-                      </Link>
-                    </Fragment>
-                  )}
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr />
-          )}
-        </tbody>
-      </table>
-
-      {loading && <Spinner />}
+    <div className="container-fluid index">
+      <div className="row">
+        <div className="col m6 v-divider">
+          <div className="row">
+            <div className="col m8 offset-m2">
+              <PostForm />
+            </div>
+          </div>
+        </div>
+        <div className="col m6">
+          <div className="row">
+            <div className="col m8 offset-m2">
+              <AllPosts
+                posts={posts}
+                isAuthenticated={isAuthenticated}
+                loading={loading}
+                handleDelete={handleDelete}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

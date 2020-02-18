@@ -106,7 +106,7 @@ const TrackList = ({ files, isAuthenticated }) => {
           ) : (
             <tr>
               <td colSpan="2">
-                <Spinner />
+                {files.length === 0 ? 'No tracks' : <Spinner />}
               </td>
             </tr>
           )}

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faEdit, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import {
   getMembers,
   createMember,
@@ -9,17 +9,21 @@ import {
   deleteMember,
   deleteManyMembers
 } from '../../actions/memberActions';
-import genKey from '../../utils/genKey';
+import MemberRow from './MemberRow';
 import './Members.scss';
+import genKey from '../../utils/genKey';
 
 const MembersContainer = () => {
   const dispatch = useDispatch();
 
-  const { membersList } = useSelector(state => ({
-    membersList: state.members
-  }));
+  const { membersList } = useSelector(
+    state => ({
+      membersList: state.members
+    }),
+    shallowEqual
+  );
 
-  const { members, member, errors } = membersList;
+  const { members, errors } = membersList;
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -28,6 +32,10 @@ const MembersContainer = () => {
   useEffect(() => {
     dispatch(getMembers());
   }, [dispatch]);
+
+  useEffect(() => {
+    console.log('updated');
+  }, [membersList]);
 
   const handleSelect = id => {
     if (selected.includes(id)) {
@@ -39,10 +47,6 @@ const MembersContainer = () => {
       setSelected(currentSelected);
     }
   };
-
-  useEffect(() => {
-    console.log(selected);
-  }, [selected]);
 
   const handleChangeName = e => setName(e.target.value);
   const handleChangeEmail = e => setEmail(e.target.value);
@@ -60,8 +64,7 @@ const MembersContainer = () => {
     dispatch(deleteManyMembers(selected, window.location));
   };
 
-  const handleUpdate = id => {
-    const updatedMember = {};
+  const handleUpdate = (id, updatedMember) => {
     dispatch(updateMember(id, updatedMember));
   };
 
@@ -83,6 +86,10 @@ const MembersContainer = () => {
 
   return (
     <div className="container members-container">
+      <div className="col s12">
+        <h5>Members</h5>
+        <hr style={{ margin: '3rem 0' }} />
+      </div>
       <div className="col s12">
         <div className="row">
           <div className="input-field col s4">
@@ -165,7 +172,7 @@ const MembersContainer = () => {
                     selected.length > 1 && selected.length === members.length
                   }
                 />
-                <span>Select</span>
+                <span></span>
               </label>
             </th>
             <th>Name</th>
@@ -177,32 +184,14 @@ const MembersContainer = () => {
           {members && members.length ? (
             members.map((m, i) => {
               return (
-                <tr key={genKey(m.name, i)}>
-                  <td>
-                    <label>
-                      <input
-                        type="checkbox"
-                        onChange={() => handleSelect(m._id)}
-                        checked={selected.includes(m._id)}
-                      />
-                      <span></span>
-                    </label>
-                  </td>
-                  <td>{m.name}</td>
-                  <td>{m.email}</td>
-                  <td>
-                    <FontAwesomeIcon
-                      icon={faTrash}
-                      className="icon"
-                      onClick={() => handleDelete(m._id)}
-                    />
-                    <FontAwesomeIcon
-                      icon={faEdit}
-                      className="icon"
-                      onClick={() => handleUpdate(m._id)}
-                    />
-                  </td>
-                </tr>
+                <MemberRow
+                  key={genKey(m.name, i)}
+                  member={m}
+                  handleSelect={handleSelect}
+                  handleDelete={handleDelete}
+                  handleUpdate={handleUpdate}
+                  selected={selected}
+                />
               );
             })
           ) : (

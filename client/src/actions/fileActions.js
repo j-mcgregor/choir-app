@@ -51,8 +51,9 @@ export const uploadFiles = (formData, headers) => async dispatch => {
 export const deleteFile = (id, headers, callback) => async dispatch => {
   try {
     dispatch({ type: DELETE_FILE_STARTED });
-    const response = await axios.delete(`/api/files/${id}`, {
-      headers
+    const response = await axios.post(`/api/files/delete`, {
+      headers,
+      id
     });
     if (response.status >= 200 || response.status < 300) {
       dispatch({ type: DELETE_FILE_SUCCESS, payload: response.data });

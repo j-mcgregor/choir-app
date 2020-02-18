@@ -5,6 +5,7 @@ import { getFiles } from '../../actions/fileActions';
 import { getPosts, deletePost } from '../../actions/postActions';
 import TrackList from '../tracks/TrackList';
 import PostList from '../posts/PostList';
+import '../../App.scss';
 import './Dashboard.scss';
 
 const Dashboard = () => {
@@ -38,10 +39,10 @@ const Dashboard = () => {
       </div>
 
       <div className="row dashboard-container">
-        <div className="col s8">
+        <div className="col s7 p-2">
           <TrackList files={files} isAuthenticated={isAuthenticated} />
         </div>
-        <div className="col s4">
+        <div className="col s4 push-s1 p-2">
           <PostList
             posts={posts}
             isAuthenticated={isAuthenticated}

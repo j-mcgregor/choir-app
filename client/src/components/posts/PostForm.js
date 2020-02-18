@@ -5,8 +5,8 @@ import { createPost } from '../../actions/postActions';
 import './Form.scss';
 
 const PostForm = props => {
-  const [title, setTitle] = useState('hello');
-  const [body, setBody] = useState('world');
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
 
   const dispatch = useDispatch();
   const { posts } = useSelector(state => ({
@@ -19,59 +19,54 @@ const PostForm = props => {
   const handleSubmit = e => {
     const newPost = { title, body };
     dispatch(createPost(newPost, props.history));
+    window.location.reload();
   };
 
   const { errors } = posts;
 
   return (
-    <div className="container form-container">
+    <div>
       <div className="row">
-        <div className="col s6 push-s3">
-          <div className="row">
-            <h5 className="col s12">New Post</h5>
-          </div>
+        <h5 className="col s12">New Post</h5>
+      </div>
+      <div className="row">
+        <div className="input-field col s12">
+          <input
+            placeholder="Post title..."
+            id="title"
+            type="text"
+            className={`validate ${errors && errors.title ? 'invalid' : ''}`}
+            value={title}
+            onChange={handleOnChangeTitle}
+            error={errors.title}
+          />
+          <label htmlFor="title">Title</label>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col s12">
           <div className="row">
             <div className="input-field col s12">
-              <input
-                placeholder="Post title..."
-                id="title"
-                type="text"
-                className={`validate ${
-                  errors && errors.title ? 'invalid' : ''
+              <textarea
+                id="body"
+                className={`materialize-textarea ${
+                  errors && errors.body ? 'invalid' : ''
                 }`}
-                value={title}
-                onChange={handleOnChangeTitle}
-                error={errors.title}
-              />
-              <label htmlFor="title">Title</label>
+                onChange={handleOnChangeBody}
+                value={body}
+              ></textarea>
+              <label htmlFor="body">Body</label>
             </div>
           </div>
           <div className="row">
-            <div className="col s12">
-              <div className="row">
-                <div className="input-field col s12">
-                  <textarea
-                    id="body"
-                    className={`materialize-textarea ${
-                      errors && errors.body ? 'invalid' : ''
-                    }`}
-                    onChange={handleOnChangeBody}
-                    value={body}
-                  ></textarea>
-                  <label htmlFor="body">Body</label>
-                </div>
-              </div>
-              <div className="row">
-                <div className="col s2 push-s10">
-                  <button
-                    type="submit"
-                    className="btn waves-effect waves-light hoverable"
-                    onClick={handleSubmit}
-                  >
-                    Create!
-                  </button>
-                </div>
-              </div>
+            <div className="col s2 push-s10">
+              <button
+                type="submit"
+                className="btn waves-effect waves-light hoverable"
+                onClick={handleSubmit}
+              >
+                Create!
+              </button>
             </div>
           </div>
         </div>

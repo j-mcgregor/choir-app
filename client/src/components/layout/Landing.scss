@@ -2,7 +2,8 @@
 
 .container-fluid {
   box-sizing: border-box;
-  padding: 4rem 3rem;
+  padding: 2rem 3rem;
+  // background: #eee;
 
   &.banner {
     background: linear-gradient(210deg, $color1, $color3);

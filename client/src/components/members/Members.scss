@@ -1,4 +1,30 @@
+@import './../../palette.scss';
+
 .members-container {
   min-height: 90vh;
   padding: 5rem 0 10rem;
+
+  svg {
+    &:hover {
+      cursor: pointer;
+      color: $color1;
+    }
+  }
+  button {
+    &.save-btn {
+      background: none;
+      border: none;
+      padding: 0;
+    }
+  }
+
+  table {
+    input {
+      font-size: inherit;
+      height: inherit;
+      margin: 0;
+      padding-bottom: 2px;
+      border-color: #ccc;
+    }
+  }
 }

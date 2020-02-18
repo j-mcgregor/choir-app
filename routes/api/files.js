@@ -88,16 +88,15 @@ router.post('/upload', upload.any(), (req, res) => {
  @access Public
  */
 
-router.get('/all', (req, res) => {
-  gfs.files.find().toArray((err, files) => {
-    if (!files || files.length === 0) {
-      return res.status(200).json({
-        err: 'No files exist'
-      });
-    } else {
-      return res.status(200).json(files);
-    }
-  });
+router.get('/all', async (req, res) => {
+  try {
+    const files = await gfs.files.find().toArray();
+    if (!files) throw Error('Broken');
+
+    res.status(200).json(files);
+  } catch (error) {
+    res.status(400).json({ err: error.message });
+  }
 });
 
 /**
@@ -168,18 +167,22 @@ router.get('/stream/:id', (req, res) => {
   });
 });
 
-router.delete('/:id', (req, res) => {
-  if (handleExpire(req, res)) {
-    gfs.remove({ _id: req.params.id, root: 'uploads' }, err => {
-      if (err) {
-        return res.status(404).json({ err });
-      }
-
-      res.status(204).json({ message: 'Track deleted successfully' });
+router.post('/delete', async (req, res) => {
+  // if (handleExpire(req, res)) {
+  try {
+    const success = await gfs.remove({
+      _id: req.body.id,
+      root: 'uploads'
     });
-  } else {
+
+    if (!success) throw Error();
     res.status(204).json({ message: 'Track deleted successfully' });
+  } catch (error) {
+    res.status(400).json({ err: error.message });
   }
+  // } else {
+  //   res.status(204).json({ message: 'Track deleted successfully' });
+  // }
 });
 
 module.exports = router;
