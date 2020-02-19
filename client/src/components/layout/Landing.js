@@ -31,19 +31,22 @@ const Landing = () => {
             Welcome to <br /> All Saints Community Choir!
           </h4>
           <p className="col m8">
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum
-            fugit quis nostrum nemo deserunt velit delectus asperiores laborum
-            dolores iure quae eligendi voluptatibus, odio unde est id nisi
-            consectetur tenetur.
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolorum fugit quis nostrum nemo deserunt velit
+            delectus asperiores laborum dolores iure quae eligendi voluptatibus, odio unde est id nisi consectetur
+            tenetur.
           </p>
         </div>
       </div>
       <div className="container-fluid">
         <div className="row">
-          <div className="col s8">
+          <div className="col l12">
+            <h5 className="left-align">Tracks</h5>
             <TrackList files={files} isAuthenticated={isAuthenticated} />
           </div>
-          <div className="col s4">
+        </div>
+        <div className="row">
+          <div className="col l12">
+            <h5 className="left-align">Posts</h5>
             <PostList posts={posts} isAuthenticated={isAuthenticated} />
           </div>
         </div>

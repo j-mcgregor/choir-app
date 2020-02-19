@@ -9,54 +9,47 @@ import genKey from '../../utils/genKey';
 const PostList = ({ posts, isAuthenticated, handleDelete }) => {
   return (
     <div>
-      <h5 className="left-align">New Post</h5>
-      <div>
-        <table className="striped">
-          <thead>
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            {isAuthenticated && <th>Action</th>}
+          </tr>
+        </thead>
+        <tbody>
+          {posts && posts.loading ? (
             <tr>
-              <th>Title</th>
-              {isAuthenticated && <th>Action</th>}
+              <td colSpan="2">
+                <Spinner />
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {posts && posts.loading ? (
-              <tr>
-                <td colSpan="2">
-                  <Spinner />
+          ) : posts.posts.length ? (
+            posts.posts.map((p, i) => (
+              <tr key={genKey(p.title, i)}>
+                <td>
+                  <Link to={`/posts/${p._id}`} className="truncate">
+                    {p.title}
+                  </Link>
                 </td>
-              </tr>
-            ) : posts.posts.length ? (
-              posts.posts.map((p, i) => (
-                <tr key={genKey(p.title, i)}>
+                {isAuthenticated && (
                   <td>
-                    <Link to={`/posts/${p._id}`} className="truncate">
-                      {p.title}
-                    </Link>
+                    <Fragment>
+                      <FontAwesomeIcon icon={faTrash} className="icon" onClick={() => handleDelete(p._id)} />
+                      <Link to={`/posts/${p._id}/edit`}>
+                        <FontAwesomeIcon icon={faEdit} />
+                      </Link>
+                    </Fragment>
                   </td>
-                  {isAuthenticated && (
-                    <td>
-                      <Fragment>
-                        <FontAwesomeIcon
-                          icon={faTrash}
-                          className="icon"
-                          onClick={() => handleDelete(p._id)}
-                        />
-                        <Link to={`/posts/${p._id}/edit`}>
-                          <FontAwesomeIcon icon={faEdit} />
-                        </Link>
-                      </Fragment>
-                    </td>
-                  )}
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td>No posts</td>
+                )}
               </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+            ))
+          ) : (
+            <tr>
+              <td>No posts</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };

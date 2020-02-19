@@ -35,7 +35,7 @@ const TrackList = ({ files, isAuthenticated }) => {
       const response = await axios.get(`/api/files/download/${id}`, {
         responseType: 'blob'
       });
-      FileSaver.saveAs(response.data, `${filename}.mp3`);
+      FileSaver.saveAs(response.data, `${filename}`);
     } catch (error) {
       console.log(error);
     }
@@ -43,13 +43,12 @@ const TrackList = ({ files, isAuthenticated }) => {
 
   return (
     <div>
-      <h5 className="left-align">
-        Tracks {files && files.length ? `: ${files.length}` : ''}
-      </h5>
       <table>
         <thead>
           <tr>
             <th>Track</th>
+            <th>Description</th>
+            <th>Type</th>
             <th>Player</th>
             <th>Actions</th>
           </tr>
@@ -57,9 +56,12 @@ const TrackList = ({ files, isAuthenticated }) => {
         <tbody>
           {files && files.length ? (
             files.map((f, i) => {
+              const { metadata } = f;
               return (
                 <tr key={genKey(f.filename, i)}>
                   <td>{f.filename}</td>
+                  <td>{metadata.description || ''}</td>
+                  <td>{metadata.trackType || ''}</td>
                   <td style={{ minWidth: '200px' }}>
                     <ReactPlayer
                       url={`/api/files/stream/${f._id}`}
@@ -77,10 +79,7 @@ const TrackList = ({ files, isAuthenticated }) => {
                     />
                   </td>
                   <td>
-                    <button
-                      className="btn-floating mr-sm"
-                      onClick={() => handleCopy(f._id)}
-                    >
+                    <button className="btn-floating mr-sm" onClick={() => handleCopy(f._id)}>
                       <FontAwesomeIcon icon={faCopy} />
                     </button>
                     <button
@@ -90,10 +89,7 @@ const TrackList = ({ files, isAuthenticated }) => {
                       <FontAwesomeIcon icon={faDownload} />
                     </button>
                     {isAuthenticated ? (
-                      <button
-                        className="btn-floating mr-sm red accent-2"
-                        onClick={() => handleDelete(f._id)}
-                      >
+                      <button className="btn-floating mr-sm red accent-2" onClick={() => handleDelete(f._id)}>
                         <FontAwesomeIcon icon={faTrash} />
                       </button>
                     ) : (
@@ -105,9 +101,7 @@ const TrackList = ({ files, isAuthenticated }) => {
             })
           ) : (
             <tr>
-              <td colSpan="2">
-                {files.length === 0 ? 'No tracks' : <Spinner />}
-              </td>
+              <td colSpan="2">{files.length === 0 ? 'No tracks' : <Spinner />}</td>
             </tr>
           )}
         </tbody>

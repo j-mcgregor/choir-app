@@ -10,8 +10,7 @@ const jwt = require('jsonwebtoken');
 const path = require('path');
 const keys = require('../../config/keys');
 
-const parseToken = token =>
-  jwt.verify(token.replace(/^JWT\s/, ''), keys.secretOrKey);
+const parseToken = token => jwt.verify(token.replace(/^JWT\s/, ''), keys.secretOrKey);
 
 const handleExpire = (req, res) => {
   try {
@@ -57,10 +56,15 @@ const storage = new GridFsStorage({
         if (err) {
           return reject(err);
         }
-        const filename = buf.toString('hex') + path.extname(file.originalname);
+        const filename = file.originalname;
+
         const fileInfo = {
           filename: filename,
-          bucketName: 'uploads'
+          bucketName: 'uploads',
+          metadata: {
+            description: req.headers.uploaddescription,
+            trackType: req.headers.tracktype
+          }
         };
         resolve(fileInfo);
       });
@@ -105,9 +109,30 @@ router.get('/all', async (req, res) => {
  @access Public
  */
 
-router.get('/download/:id', (req, res) => {
+router.get('/download/:id', async (req, res) => {
   gfs.collection('uploads');
+  if (!req.params.id) res.status(400).json({ error: 'ID missing' });
 
+  try {
+    const file = await gfs.files.findOne({ _id: new ObjectId(req.params.id) });
+    if (!file) throw Error('No File');
+
+    const readstream = gfs.createReadStream({
+      _id: file._id,
+      root: 'uploads'
+    });
+
+    res.set('Content-Type', file.contentType);
+    res.set('Content-Disposition', `attachment; filename="${encodeURIComponent(file.filename)}"`);
+
+    readstream.on('error', err => {
+      console.log(err);
+      res.end();
+    });
+    return readstream.pipe(res);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
   gfs.files.findOne({ _id: new ObjectId(req.params.id) }, (err, file) => {
     if (err) res.status(400).send(err);
     if (!file) res.status(404).send(err);
@@ -118,10 +143,7 @@ router.get('/download/:id', (req, res) => {
     });
 
     res.set('Content-Type', file.contentType);
-    res.set(
-      'Content-Disposition',
-      `attachment; filename="${encodeURIComponent(file.filename)}"`
-    );
+    res.set('Content-Disposition', `attachment; filename="${encodeURIComponent(file.filename)}"`);
     readstream.on('error', err => {
       console.log(err);
       res.end();
@@ -136,19 +158,14 @@ router.get('/download/:id', (req, res) => {
  @access Public
  */
 
-router.get('/stream/:id', (req, res) => {
+router.get('/stream/:id', async (req, res) => {
   gfs.collection('uploads'); //set collection name to lookup into
 
-  const fileId = req.params.id;
+  if (!req.params.id) res.status(400).json({ error: 'ID missing' });
 
-  gfs.files.find({ _id: new ObjectId(fileId) }).toArray((err, files) => {
-    /** First check if file exists */
-    if (!files || files.length === 0) {
-      return res.status(404).json({
-        responseCode: 1,
-        responseMessage: 'file not found'
-      });
-    }
+  try {
+    const files = await gfs.files.find({ _id: new ObjectId(req.params.id) }).toArray();
+    if (!files || files.length === 0) throw Error('file not found');
 
     // create read stream
     const readstream = gfs.createReadStream({
@@ -157,14 +174,13 @@ router.get('/stream/:id', (req, res) => {
     });
 
     res.set('Content-Type', files[0].contentType);
-    res.set(
-      'Content-Disposition',
-      `attachment; filename="${encodeURIComponent(files[0].filename)}"`
-    );
+    res.set('Content-Disposition', `attachment; filename="${encodeURIComponent(files[0].filename)}"`);
 
     // return res
     return readstream.pipe(res);
-  });
+  } catch (error) {
+    res.status(404).json({ error: error.message });
+  }
 });
 
 router.post('/delete', async (req, res) => {
@@ -180,9 +196,6 @@ router.post('/delete', async (req, res) => {
   } catch (error) {
     res.status(400).json({ err: error.message });
   }
-  // } else {
-  //   res.status(204).json({ message: 'Track deleted successfully' });
-  // }
 });
 
 module.exports = router;

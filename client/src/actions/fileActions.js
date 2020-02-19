@@ -29,7 +29,7 @@ export const getFiles = () => async dispatch => {
   }
 };
 
-export const uploadFiles = (formData, headers) => async dispatch => {
+export const uploadFiles = (formData, headers, history) => async dispatch => {
   try {
     dispatch({ type: UPLOAD_FILES_STARTED });
     const response = await axios.post('/api/files/upload', formData, {
@@ -37,6 +37,7 @@ export const uploadFiles = (formData, headers) => async dispatch => {
     });
     if (response.status >= 200 || response.status < 300) {
       dispatch({ type: UPLOAD_FILES_SUCCESS, payload: response.data });
+      history.push('/dashboard');
     } else {
       throw Error();
     }
