@@ -2,16 +2,7 @@ import React, { Fragment, Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faHome,
-  faUpload,
-  faFolderOpen,
-  faSignOutAlt,
-  faPlus,
-  faCaretDown,
-  faCommentAlt,
-  faUsers
-} from '@fortawesome/free-solid-svg-icons';
+import { faHome, faUpload, faFolderOpen, faSignOutAlt, faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { logoutUser } from '../../actions/authActions';
 import './Navbar.scss';
 import M from 'materialize-css';
@@ -35,32 +26,18 @@ class Navbar extends Component {
       <Fragment>
         <li>
           <Link to="/upload">
-            <FontAwesomeIcon icon={faUpload} className="mr-1" />
-            Upload
+            <FontAwesomeIcon icon={faUpload} />
           </Link>
         </li>
         <li>
           <Link to="/dashboard">
-            <FontAwesomeIcon icon={faFolderOpen} className="mr-1" />
-            Dashboard
+            <FontAwesomeIcon icon={faFolderOpen} />
           </Link>
         </li>
         <li>
           <Link to="/" onClick={this.logoutHandler}>
-            <FontAwesomeIcon icon={faSignOutAlt} className="mr-1" />
-            Logout
+            <FontAwesomeIcon icon={faSignOutAlt} />
           </Link>
-        </li>
-      </Fragment>
-    );
-
-    const guestLinks = (
-      <Fragment>
-        <li>
-          <Link to="/login">Log In</Link>
-        </li>
-        <li>
-          <Link to="/register">Register</Link>
         </li>
       </Fragment>
     );
@@ -80,20 +57,8 @@ class Navbar extends Component {
             <Link to="/" className="brand-logo left">
               <FontAwesomeIcon icon={faHome} />
             </Link>
-            <ul id="dropdown1" className="dropdown-content">
-              {trackRoutes}
-            </ul>
             <ul id="nav-mobile" className="right">
-              {isAuthenticated ? (
-                <li>
-                  <a className="dropdown-trigger" id="dropdown-trigger" href="#!" data-target="dropdown1">
-                    <FontAwesomeIcon icon={faCaretDown} className="mr-1" />
-                    Tracks
-                  </a>
-                </li>
-              ) : (
-                trackRoutes
-              )}
+              {trackRoutes}
               {isAuthenticated && authLinks}
             </ul>
           </div>
