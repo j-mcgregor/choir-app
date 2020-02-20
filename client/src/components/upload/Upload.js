@@ -61,7 +61,7 @@ const Upload = props => {
           <div>
             <div className="row">
               <div className="file-field input-field col s7">
-                <div className="btn">
+                <div className="btn btn-custom">
                   <span>File</span>
                   <input type="file" onChange={handleFile} multiple />
                 </div>
@@ -88,6 +88,7 @@ const Upload = props => {
                     type="radio"
                     onChange={handleTrackType}
                     checked={trackType === 'ALL'}
+                    style={{ color: 'pink' }}
                   />
                   <span>All</span>
                 </label>
@@ -148,7 +149,11 @@ const Upload = props => {
                 </label>
               </div>
               <div className="input-field col s3">
-                <button type="submit" className="btn waves-effect waves-light hoverable" disabled={filesLoading}>
+                <button
+                  type="submit"
+                  className="btn waves-effect waves-light hoverable btn-custom"
+                  disabled={filesLoading}
+                >
                   <FontAwesomeIcon icon={faUpload} className="mr-1" />
                   {filesLoading ? 'Uploading' : 'Upload'}
                 </button>

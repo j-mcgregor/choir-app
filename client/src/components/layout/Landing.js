@@ -24,7 +24,7 @@ const Landing = () => {
   }, [dispatch]);
 
   return (
-    <div>
+    <div style={{ minHeight: '90vh' }}>
       <div className="container-fluid purple lighten-5">
         <div className="row">
           <h4 className="col m8">
@@ -42,12 +42,6 @@ const Landing = () => {
           <div className="col l12">
             <h5 className="left-align">Tracks</h5>
             <TrackList files={files} isAuthenticated={isAuthenticated} />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col l12">
-            <h5 className="left-align">Posts</h5>
-            <PostList posts={posts} isAuthenticated={isAuthenticated} />
           </div>
         </div>
       </div>

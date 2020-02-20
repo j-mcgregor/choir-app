@@ -44,12 +44,6 @@ const Dashboard = () => {
           <TrackList files={files} isAuthenticated={isAuthenticated} />
         </div>
       </div>
-      <div className="row dashboard-container">
-        <div className="col s12">
-          <h5 className="left-align">Posts</h5>
-          <PostList posts={posts} isAuthenticated={isAuthenticated} handleDelete={handleDelete} />
-        </div>
-      </div>
     </div>
   );
 };

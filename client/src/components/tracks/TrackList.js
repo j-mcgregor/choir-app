@@ -49,7 +49,7 @@ const TrackList = ({ files, isAuthenticated }) => {
             <th>Track</th>
             <th>Description</th>
             <th>Type</th>
-            <th>Player</th>
+            <th>Stream</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -101,7 +101,7 @@ const TrackList = ({ files, isAuthenticated }) => {
             })
           ) : (
             <tr>
-              <td colSpan="2">{files.length === 0 ? 'No tracks' : <Spinner />}</td>
+              <td colSpan="5">{files.length === 0 ? 'No tracks' : <Spinner />}</td>
             </tr>
           )}
         </tbody>

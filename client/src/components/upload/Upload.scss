@@ -33,4 +33,11 @@
   .row .col.s3 {
     margin-right: 0;
   }
+
+  [type='radio'].with-gap:checked + span:before {
+    border-color: $color3;
+  }
+  [type='radio'].with-gap:checked + span:after {
+    border-color: $color2;
+  }
 }

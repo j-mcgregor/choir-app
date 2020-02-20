@@ -18,6 +18,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import Upload from './components/upload/Upload';
 import PostsContainer from './components/posts/PostsContainer';
 import MembersContainer from './components/members/MembersContainer';
+import TracksContainer from './components/tracks/TracksContainer';
 
 import './App.scss';
 
@@ -51,10 +52,9 @@ class App extends Component {
             <Route exact path="/register" component={Register} />
             <Route exact path="/login" component={Login} />
             <Switch>
+              <Route path="/tracks" component={TracksContainer} />
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/upload" component={Upload} />
-              <PrivateRoute path="/posts" component={PostsContainer} />
-              <PrivateRoute path="/members" component={MembersContainer} />
             </Switch>
             <Footer />
           </div>

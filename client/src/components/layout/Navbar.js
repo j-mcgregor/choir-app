@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Fragment, Component } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,6 +15,7 @@ import {
 import { logoutUser } from '../../actions/authActions';
 import './Navbar.scss';
 import M from 'materialize-css';
+import genKey from '../../utils/genKey';
 
 class Navbar extends Component {
   logoutHandler = e => {
@@ -30,6 +31,48 @@ class Navbar extends Component {
   render() {
     const { isAuthenticated } = this.props.auth;
 
+    const authLinks = (
+      <Fragment>
+        <li>
+          <Link to="/upload">
+            <FontAwesomeIcon icon={faUpload} className="mr-1" />
+            Upload
+          </Link>
+        </li>
+        <li>
+          <Link to="/dashboard">
+            <FontAwesomeIcon icon={faFolderOpen} className="mr-1" />
+            Dashboard
+          </Link>
+        </li>
+        <li>
+          <Link to="/" onClick={this.logoutHandler}>
+            <FontAwesomeIcon icon={faSignOutAlt} className="mr-1" />
+            Logout
+          </Link>
+        </li>
+      </Fragment>
+    );
+
+    const guestLinks = (
+      <Fragment>
+        <li>
+          <Link to="/login">Log In</Link>
+        </li>
+        <li>
+          <Link to="/register">Register</Link>
+        </li>
+      </Fragment>
+    );
+
+    const trackRoutes = ['all', 'alto', 'bass', 'recordings', 'soprano', 'tenor'].map((track, i) => (
+      <li key={genKey(track, i)}>
+        <Link to={`/tracks/${track}`} style={{ textTransform: 'capitalize' }}>
+          {track}
+        </Link>
+      </li>
+    ));
+
     return (
       <div className="navbar-fixed">
         <nav className="">
@@ -38,73 +81,21 @@ class Navbar extends Component {
               <FontAwesomeIcon icon={faHome} />
             </Link>
             <ul id="dropdown1" className="dropdown-content">
-              <li>
-                <Link to="/posts">
-                  <FontAwesomeIcon icon={faCommentAlt} className="mr-1" />
-                  Posts
-                </Link>
-              </li>
-              <li>
-                <Link to="/posts/new">
-                  <FontAwesomeIcon icon={faPlus} className="mr-1" />
-                  New Post
-                </Link>
-              </li>
+              {trackRoutes}
             </ul>
-            {isAuthenticated ? (
-              <ul id="nav-mobile" className="right">
+            <ul id="nav-mobile" className="right">
+              {isAuthenticated ? (
                 <li>
-                  <Link to="/members">
-                    <FontAwesomeIcon icon={faUsers} className="mr-1" />
-                    Members
-                  </Link>
-                </li>
-                {/* <li>
-                  <a
-                    className="dropdown-trigger"
-                    id="dropdown-trigger"
-                    href="#!"
-                    data-target="dropdown1"
-                  >
+                  <a className="dropdown-trigger" id="dropdown-trigger" href="#!" data-target="dropdown1">
                     <FontAwesomeIcon icon={faCaretDown} className="mr-1" />
-                    Posts
+                    Tracks
                   </a>
-                </li> */}
-                <li>
-                  <Link to="/posts">
-                    <FontAwesomeIcon icon={faCommentAlt} className="mr-1" />
-                    Posts
-                  </Link>
                 </li>
-                <li>
-                  <Link to="/upload">
-                    <FontAwesomeIcon icon={faUpload} className="mr-1" />
-                    Upload
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/dashboard">
-                    <FontAwesomeIcon icon={faFolderOpen} className="mr-1" />
-                    Dashboard
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/" onClick={this.logoutHandler}>
-                    <FontAwesomeIcon icon={faSignOutAlt} className="mr-1" />
-                    Logout
-                  </Link>
-                </li>
-              </ul>
-            ) : (
-              <ul id="nav-mobile" className="right">
-                <li>
-                  <Link to="/login">Log In</Link>
-                </li>
-                <li>
-                  <Link to="/register">Register</Link>
-                </li>
-              </ul>
-            )}
+              ) : (
+                trackRoutes
+              )}
+              {isAuthenticated && authLinks}
+            </ul>
           </div>
         </nav>
       </div>
