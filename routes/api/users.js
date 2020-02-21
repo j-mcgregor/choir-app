@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -10,6 +11,7 @@ const validateLoginInput = require('../../validation/login');
 
 // Load User model
 const User = require('../../models/User');
+const Password = require('../../models/Password');
 
 // @route POST api/users/register
 // @desc Register user
@@ -97,12 +99,63 @@ router.post('/login', (req, res) => {
           }
         );
       } else {
-        return res
-          .status(400)
-          .json({ passwordincorrect: 'Password incorrect' });
+        return res.status(400).json({ passwordincorrect: 'Password incorrect' });
       }
     });
   });
+});
+
+// <<<<<<<<<<<<<<< PASSWORD >>>>>>>>>>>>>>>>>
+
+router.post('/checkPassword', async (req, res) => {
+  if (!req.body.password) return res.json({ password: 'Password missing' });
+  const { password } = req.body;
+
+  try {
+    const passwords = await Password.find();
+    const list = passwords.map(p => p.password);
+    console.log(list);
+    if (list.includes(password)) {
+      res.status(200).json({ success: true });
+    } else {
+      res.json({ password: 'Password incorrect' });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ errors: error.message });
+  }
+});
+
+router.post('/setPassword', async (req, res) => {
+  if (!req.body.password || !req.body.user) return res.status(400).json({ password: 'Password field missing' });
+  const { password, user } = req.body;
+
+  // IF PASSWORD WITH USERID EXISTS, UPDATE
+  // try {
+  const existingPassword = await Password.findOne({ userId: user.id });
+
+  if (existingPassword) {
+    existingPassword.password = password;
+    try {
+      const updatedPassword = await existingPassword.save();
+
+      if (!updatedPassword) throw Error('Password update failed');
+
+      res.status(200).json({ success: true });
+    } catch (error) {
+      res.status(400).json({ errors: error.message });
+    }
+  } else {
+    try {
+      const newPassword = new Password({ password, userId: new mongoose.Types.ObjectId(user.id) });
+
+      const response = await newPassword.save();
+
+      res.status(200).json(response);
+    } catch (error) {
+      res.status(400).json({ errors: error.message });
+    }
+  }
 });
 
 module.exports = router;

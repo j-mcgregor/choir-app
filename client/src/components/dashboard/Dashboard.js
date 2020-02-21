@@ -1,18 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import classnames from 'classnames';
+import { createPassword } from '../../actions/authActions';
 import { getFiles } from '../../actions/fileActions';
-import { getPosts, deletePost } from '../../actions/postActions';
 import TrackList from '../tracks/TrackList';
-import PostList from '../posts/PostList';
 import '../../App.scss';
 import './Dashboard.scss';
 
 const Dashboard = () => {
-  const { auth, files, posts } = useSelector(state => ({
+  const [password, setPassword] = useState('');
+  const { auth, files, authErrors, authLoading } = useSelector(state => ({
     auth: state.auth,
-    files: state.files.files,
-    posts: state.posts
+    authErrors: state.auth.errors,
+    authLoading: state.auth.loading,
+    files: state.files.files
   }));
 
   const { user, isAuthenticated } = auth;
@@ -21,12 +22,12 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(getFiles());
-    dispatch(getPosts());
   }, [dispatch]);
 
-  const handleDelete = id => {
-    dispatch(deletePost(id));
-    window.location.reload();
+  const handleChangePassword = e => setPassword(e.target.value);
+
+  const handleSubmit = () => {
+    dispatch(createPassword(password, user));
   };
 
   return (
@@ -35,6 +36,29 @@ const Dashboard = () => {
         <div className="row">
           <h3 className="">Dashboard</h3>
           <h6 className="subtitle">Welcome, {user.name}</h6>
+        </div>
+        <div className="row">
+          <p className="col s6">
+            Set a new password for member access
+            <input
+              onChange={handleChangePassword}
+              value={password}
+              error={authErrors.password}
+              id="password"
+              type="password"
+              className={classnames('', {
+                invalid: authErrors.password
+              })}
+            />
+            <span className="red-text">{authErrors.password}</span>
+          </p>
+        </div>
+        <div className="row">
+          <div className="col s6">
+            <button type="submit" className="btn btn-custom" style={{ width: '100%' }} onClick={handleSubmit}>
+              {authLoading ? 'Saving...' : 'Enter'}
+            </button>
+          </div>
         </div>
       </div>
 

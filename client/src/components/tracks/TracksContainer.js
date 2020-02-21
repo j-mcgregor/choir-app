@@ -1,19 +1,27 @@
 import React, { useEffect } from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { Switch, Route, useRouteMatch } from 'react-router-dom';
 import TrackList from './TrackList';
 import { useDispatch } from 'react-redux';
 import { deleteFile, getFiles } from '../../actions/fileActions';
 
 const TrackPage = ({ files = [], isAuthenticated, type }) => {
+  const isUserAuthenticated = localStorage.getItem('isUserAuthenticated') === 'true';
+
   const trackFilter = track => {
     return track.metadata.trackType === type;
   };
+
   const filtered = files.filter(trackFilter);
+
   return (
     <div className="container" style={{ padding: '3rem 0', minHeight: '80vh' }}>
       <h4 style={{ textTransform: 'capitalize' }}>{type.toLowerCase()} Tracks</h4>
-      <TrackList files={filtered} isAuthenticated={isAuthenticated} />
+      {isAuthenticated || isUserAuthenticated ? (
+        <TrackList files={filtered} isAuthenticated={isAuthenticated} />
+      ) : (
+        <div>You need permission to see this page</div>
+      )}
     </div>
   );
 };

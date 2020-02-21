@@ -6,4 +6,12 @@ nav {
   .dropdown-content {
     top: 64px !important;
   }
+
+  svg.fa-home {
+    width: 20px !important;
+
+    &:hover {
+      color: #ddd;
+    }
+  }
 }
